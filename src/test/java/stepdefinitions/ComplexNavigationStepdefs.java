@@ -23,7 +23,7 @@ public class ComplexNavigationStepdefs {
         driver.get(url);
     }
 
-    @When("Find the element by id {string}")
+    @When("I find the element by id {string}")
     public void findTheElementById(String elementId) {
         WebElement element = driver.findElement(By.id(elementId));
         element.click();
@@ -32,6 +32,7 @@ public class ComplexNavigationStepdefs {
     @Then("I see the test {string} page")
     public void iSeeTheTestPage(String pageTitle) {
         String tabTitle = driver.getTitle();
+        System.out.println(tabTitle);
         Assertions.assertTrue(tabTitle.contains(pageTitle));
     }
 
