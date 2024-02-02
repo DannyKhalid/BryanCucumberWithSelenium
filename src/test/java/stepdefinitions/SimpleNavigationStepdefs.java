@@ -11,29 +11,30 @@ import org.openqa.selenium.chrome.ChromeOptions;
 
 public class SimpleNavigationStepdefs {
 
-    WebDriver driver;
+    TestDriverContext testDriverContext;
+
+    SimpleNavigationStepdefs(TestDriverContext testDriverContext) {
+        this.testDriverContext = testDriverContext;
+    }
 
     @Given("I have a browser open")
     public void iHaveABrowserOpen() {
-        WebDriverManager.chromedriver().driverVersion("121.0.6167.140").setup();
-        ChromeOptions options = new ChromeOptions();
-        options.addArguments("--remote-allow-origins=*");
-        driver = new ChromeDriver(options);
+
     }
 
     @When("I navigate to {string}")
     public void iNavigateTo(String url) {
-        driver.get(url);
+        testDriverContext.getDriver().get(url);
     }
 
     @Then("I see the {string} page")
     public void iSeeThePage(String pageTitle) {
-        String tabTitle = driver.getTitle();
+        String tabTitle = testDriverContext.getDriver().getTitle();
         Assertions.assertTrue(tabTitle.contains(pageTitle));
     }
 
     @Then("I close the browser")
     public void iCloseTheBrowser() {
-        driver.close();
+        testDriverContext.closeAndQuit();
     }
 }

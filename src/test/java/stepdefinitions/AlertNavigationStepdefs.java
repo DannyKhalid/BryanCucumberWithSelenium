@@ -15,39 +15,37 @@ import org.openqa.selenium.chrome.ChromeOptions;
 
 public class AlertNavigationStepdefs {
 
-    WebDriver driver;
+    TestDriverContext testDriverContext;
+
+    AlertNavigationStepdefs(TestDriverContext testDriverContext) {
+        this.testDriverContext = testDriverContext;
+    }
 
     @Given("I am on the zoo website")
     public void iAmOnTheZooWebsite() {
-        WebDriverManager.chromedriver().driverVersion("121.0.6167.140").setup();
-        ChromeOptions options = new ChromeOptions();
-        options.addArguments("--remote-allow-origins=*");
-        driver = new ChromeDriver(options);
-        driver.get("https://www.thetestroom.com/webapp/index.html");
+        testDriverContext.getDriver().get("https://www.thetestroom.com/webapp/index.html");
     }
 
     @When("I click on the contact link")
     public void iClickOnTheContactLink() {
-        WebElement element = driver.findElement(By.id("contact_link"));
+        WebElement element = testDriverContext.getDriver().findElement(By.id("contact_link"));
         element.click();
     }
 
     @And("I click on the submit button")
     public void iClickOnTheSubmitButton() {
-        WebElement element = driver.findElement(By.id("submit_message"));
+        WebElement element = testDriverContext.getDriver().findElement(By.id("submit_message"));
         element.click();
     }
 
     @Then("an alert window appears")
     public void anAlertWindowAppears() throws InterruptedException {
-        Thread.sleep(2000);
-        Alert alert = driver.switchTo().alert();
-        Assertions.assertNotNull(alert);
+        Alert alert = testDriverContext.getDriver().switchTo().alert();
         alert.dismiss();
     }
 
     @Then("I close the alert")
     public void iCloseTheAlert() {
-        driver.close();
+        testDriverContext.closeAndQuit();
     }
 }

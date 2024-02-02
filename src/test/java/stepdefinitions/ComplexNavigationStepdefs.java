@@ -12,31 +12,31 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 
 public class ComplexNavigationStepdefs {
-    WebDriver driver;
+    TestDriverContext testDriverContext;
+
+    ComplexNavigationStepdefs(TestDriverContext testDriverContext) {
+        this.testDriverContext = testDriverContext;
+    }
 
     @Given("I have a browser open to {string}")
     public void iHaveABrowserOpenTo(String url) {
-        WebDriverManager.chromedriver().driverVersion("121.0.6167.85").setup();
-        ChromeOptions options = new ChromeOptions();
-        options.addArguments("--remote-allow-origins=*");
-        driver = new ChromeDriver(options);
-        driver.get(url);
+        testDriverContext.getDriver().get(url);
     }
 
     @When("Find the element by id {string}")
     public void findTheElementById(String elementId) {
-        WebElement element = driver.findElement(By.id(elementId));
+        WebElement element = testDriverContext.getDriver().findElement(By.id(elementId));
         element.click();
     }
 
     @Then("I see the test {string} page")
     public void iSeeTheTestPage(String pageTitle) {
-        String tabTitle = driver.getTitle();
+        String tabTitle = testDriverContext.getDriver().getTitle();
         Assertions.assertTrue(tabTitle.contains(pageTitle));
     }
 
     @Then("I close the complex browser")
     public void iCloseTheComplexBrowser() {
-        driver.close();
+        testDriverContext.closeAndQuit();
     }
 }
